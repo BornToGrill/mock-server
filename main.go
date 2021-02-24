@@ -23,6 +23,12 @@ var (
 )
 
 func main() {
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "mock-server is a mock http-server utility with configurable response parameters.\n"+
+			"Usage of mock-server:\n")
+
+		flag.PrintDefaults()
+	}
 
 	flag.IntVar(&port, "port", 8080, "Port of the server")
 	flag.IntVar(&status, "status", 200, "Status code returned")
@@ -96,7 +102,6 @@ func readStdinWhenAvailable() (string, bool) {
 	stat, _ := os.Stdin.Stat()
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
 		// Stdin available
-		infoLog.Print("YES")
 		b, err := ioutil.ReadAll(os.Stdin)
 		if err != nil {
 			panic(err)
@@ -104,6 +109,5 @@ func readStdinWhenAvailable() (string, bool) {
 		return string(b), true
 	}
 	// Stdin empty
-	infoLog.Print("NO")
 	return "", false
 }
